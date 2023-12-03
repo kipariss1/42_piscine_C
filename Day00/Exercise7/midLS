@@ -1,0 +1,2 @@
+# TODO: finish script, which will list all the containings of the directory
+ls -trpm
