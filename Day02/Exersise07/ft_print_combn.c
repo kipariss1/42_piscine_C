@@ -40,7 +40,7 @@ long long int my_pow(int digit, int degree) {
 }
 
 int make_char_arr_and_check_uniq(char empty_char_arr[], int len_of_arr, long long int num_to_put) {	
-	int copy_of_num = num_to_put;
+	long long int copy_of_num = num_to_put;
 	// putting number in the empty char array	
 	int i = 0;
 	while (copy_of_num != 0) {
