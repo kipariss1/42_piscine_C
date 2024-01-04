@@ -1,4 +1,4 @@
-char* ft_strcpy(char* dest, char* src, unsigned int n) {
+char* ft_strncpy(char* dest, char* src, unsigned int n) {
     int i;
 
     for (i=0; (src[i]!='\0') && (i<n); i++) {
@@ -17,7 +17,7 @@ int main() {
 
     int n = 5;
 
-    char* res = ft_strcpy(dest, src, n);
+    char* res = ft_strncpy(dest, src, n);
 
     return 0;
 }
