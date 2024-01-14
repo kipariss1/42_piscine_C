@@ -1,6 +1,5 @@
 #include "ft_strlen.h"
 
-
 char* ft_strcat(char *dest, char *src) {
     int size_of_dest = ft_strlen(dest);
 
