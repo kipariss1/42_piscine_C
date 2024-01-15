@@ -8,3 +8,4 @@ int ft_strlen(char *str);
 char* ft_strncat(char *dest, char *src, int n);
 char* ft_strncpy(char* dest, char* src, unsigned int n);
 void ft_swap(int *a, int *b);
+void ft_initstr(char *str, unsigned int strlen);
