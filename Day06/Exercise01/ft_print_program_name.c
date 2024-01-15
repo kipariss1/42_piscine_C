@@ -1,10 +1,19 @@
 #include "libft.h"
 
-int main(void) {
+int main(int argc, char *argv[]) {
+    int temp_len = ft_strlen(argv[0]) + 1;
+    char temp[temp_len];
+    for (int i=0; i<temp_len; i++){temp[i]='\0';}   // init array
 
-    char test = 'a';
+    ft_strcpy(temp, argv[0]); 
 
-    ft_putchar(test);
+    for (int i=0; temp[i] != '\0'; i++) {
+
+       ft_putchar(temp[i]);
+
+    }
+
+    ft_putchar('\n');
     
     return 0;
 }
