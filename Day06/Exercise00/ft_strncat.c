@@ -1,4 +1,6 @@
-int ft_strlen(char *str){
+#include "ft_strlen.h"
+
+/*int ft_strlen(char *str){
 
 	int count = 0;
 
@@ -8,7 +10,7 @@ int ft_strlen(char *str){
 
 	return count;
 
-}
+}*/
 
 char* ft_strncat(char *dest, char *src, int n) {
 

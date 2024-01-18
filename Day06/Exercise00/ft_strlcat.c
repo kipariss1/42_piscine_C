@@ -1,3 +1,6 @@
+#include "ft_strlen.h"
+
+/*
 int ft_strlen(char *str){
 
 	int count = 0;
@@ -9,6 +12,7 @@ int ft_strlen(char *str){
 	return count;
 
 }
+*/
 
 unsigned int ft_strlcat(char *dest, char *src, unsigned int size) {
     // size is size (not len, len is used part, size is allocated size) of dest
