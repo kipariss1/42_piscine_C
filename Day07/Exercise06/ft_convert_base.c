@@ -20,6 +20,8 @@ char* ft_convert_base(char *nbr, char *base_from, char *base_to){
 
     int orig_base_len = ft_strlen(base_from);  
     int dest_base_len = ft_strlen(base_to);
+
+    // Convert to decimal base
  
     // TODO: finish
     return (char*)malloc(1*sizeof(char));
