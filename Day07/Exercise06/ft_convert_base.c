@@ -1,6 +1,26 @@
 #include <stdlib.h>
 #include "libft.h"
 
+int find_char_in_str(char ch, char *str){
+    for (int i=0; str[i]!='\0'; i++){
+        if (str[i]==ch){
+            return i;
+        }
+    }
+
+    return -1;
+}
+
+void translate_to_base_system(int digit, int base, char* base_system, char* dest) {
+    int remainder = digit%base;
+
+    if (digit>=base) {
+        translate_to_base_system(digit/base, base, base_system);
+    }
+
+    ft_strcat(dest, base_system[remainder]);
+}
+
 char* ft_convert_base(char *nbr, char *base_from, char *base_to){
 
     // check if nbr is in the base
@@ -55,17 +75,28 @@ char* ft_convert_base(char *nbr, char *base_from, char *base_to){
     }
 
     // Convert to decimal base
-    long long int converted_num = 0;
+    long long int decimal_num = 0;
 
     for (int i=0; i<ft_strlen(nbr); i++){ 
-        // TODO: finish
+        decimal_num = decimal_num + find_char_in_str(nbr[i], base_from)*ft_iterative_power(orig_base_len, ft_strlen(nbr) - i);   
     }
 
+    // Convert to dest base system
+    int base_to_n_of_digits;
+    long long int converted_num_copy = decimal_num;
 
+    for (base_to_n_of_digits=0; converted_num_copy>0; base_to_n_of_digits++){
+        converted_num_copy = converted_num_copy%dest_base_len;
+    }
+
+    char *converted_num = (char*)malloc(base_to_n_of_digits*sizeof(char)); 
+
+    translate_to_base_system(decimal_num, dest_base_len, base_to, converted_num);
  
-    return (char*)malloc(1*sizeof(char));
+    return converted_num;
 }
 
+// TODO: test!!!
 int main() {
 
     char nbr[] ="16";
