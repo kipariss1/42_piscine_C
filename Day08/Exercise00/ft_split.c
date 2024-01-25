@@ -1,5 +1,4 @@
 #include <stdlib.h>
-#include "libft.h"
 
 int is_separator(char ch, char *charset){
 
@@ -78,7 +77,7 @@ char** ft_split_whitespaces(char *str, char *charset){
 char** ft_split(char *str, char *charset){
     return ft_split_whitespaces(str, charset);
 }
-
+/*
 int main(){
 
     char test[] = "This is Test string, whIch will be spliTted";
@@ -88,3 +87,4 @@ int main(){
 
     return 0;
 }
+*/
