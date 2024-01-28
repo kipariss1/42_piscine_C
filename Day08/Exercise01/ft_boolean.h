@@ -1,6 +1,12 @@
 #ifndef BOOL
 #define BOOL
 
-// TODO: define EVEN(), TRUE, FALSE, EVEN_MSG, ODDMSG, put here also ft_putstr ???
+#include "ft_bool_enum.h"
+
+char EVEN_MSG[] = "I have an even number of arguments \n";
+char ODD_MSG[] = "I have an odd number of arguments \n";
+
+void ft_putstr(char *str);
+t_bool EVEN(int nbr);
 
 #endif
