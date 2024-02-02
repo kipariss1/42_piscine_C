@@ -25,7 +25,7 @@ char rot42(char ch){
     else{
         remainder = remainder - l_small;
     }
-    char new_char;
+    int new_char;
 
     while (remainder > 0){
 
