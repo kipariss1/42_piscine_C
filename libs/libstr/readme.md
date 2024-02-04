@@ -1,0 +1,1 @@
+library for working with strings and chars

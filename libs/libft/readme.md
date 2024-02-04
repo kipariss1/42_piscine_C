@@ -1,0 +1,1 @@
+general purpouse library made as in the task
