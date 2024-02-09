@@ -1,0 +1,1 @@
+gcc test_libstr_with_std.c -I../{libstr_with_std,libft}/ -L../{libstr_with_std,libft}/ -l{str_with_std,ft}
