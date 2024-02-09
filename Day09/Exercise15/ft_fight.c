@@ -4,13 +4,14 @@
 
 void ft_fight(t_perso *attacker, t_perso *defendant, t_attack attack){
 
-    char one_dead_template[] = "is dead \n";
+    char one_dead_template[] = " is dead \n";
     char fight_template1[] = " does a ";
     char fight_template2[] = " on ";
     char fight_template3[] = " \n";
     int len;
     if (attacker->life==0 && defendant->life==0){
         ft_putstr("There can be no fight, both are dead");
+        return;
     }
     else if (attacker->life<=0){
         len = my_strlen(attacker->name) + my_strlen(one_dead_template); 
@@ -19,6 +20,7 @@ void ft_fight(t_perso *attacker, t_perso *defendant, t_attack attack){
         my_strcat(res_str, attacker->name);
         my_strcat(res_str, one_dead_template);
         ft_putstr(res_str);
+        return;
     }
     else if (defendant->life<=0){
         len = my_strlen(defendant->name) + my_strlen(one_dead_template); 
@@ -27,6 +29,7 @@ void ft_fight(t_perso *attacker, t_perso *defendant, t_attack attack){
         my_strcat(res_str, defendant->name);
         my_strcat(res_str, one_dead_template);
         ft_putstr(res_str);
+        return;
     }
 
     // TODO: finish this
@@ -34,6 +37,7 @@ void ft_fight(t_perso *attacker, t_perso *defendant, t_attack attack){
     switch (attack)
     {
     case KICK: 
+    {
         char attack[] = "KICK";
 
         len_attack = my_strlen(attacker->name)+my_strlen(fight_template1)+my_strlen(attack)+my_strlen(fight_template2)+my_strlen(defendant->name)+my_strlen(fight_template3);
@@ -54,8 +58,9 @@ void ft_fight(t_perso *attacker, t_perso *defendant, t_attack attack){
         }
 
         return;
-
+    }
     case PUNCH: 
+    {
         char attack[] = "PUNCH";
 
         len_attack = my_strlen(attacker->name)+my_strlen(fight_template1)+my_strlen(attack)+my_strlen(fight_template2)+my_strlen(defendant->name)+my_strlen(fight_template3);
@@ -76,8 +81,9 @@ void ft_fight(t_perso *attacker, t_perso *defendant, t_attack attack){
         }
 
         return;
-
+    }
     case HEADBUTT:
+    {
         char attack[] = "HEADBUTT";
 
         len_attack = my_strlen(attacker->name)+my_strlen(fight_template1)+my_strlen(attack)+my_strlen(fight_template2)+my_strlen(defendant->name)+my_strlen(fight_template3);
@@ -98,7 +104,7 @@ void ft_fight(t_perso *attacker, t_perso *defendant, t_attack attack){
         }
 
         return;
-
+    }
     }
 
 
@@ -120,6 +126,15 @@ int main(){
     ft_fight(&DonnieMatrix, &FrauFarbissina, KICK);
     ft_fight(&FrauFarbissina, &DonnieMatrix, PUNCH);
     ft_fight(&DonnieMatrix, &FrauFarbissina, HEADBUTT);
+    ft_fight(&DonnieMatrix, &FrauFarbissina, HEADBUTT);
+    ft_fight(&DonnieMatrix, &FrauFarbissina, HEADBUTT);
+    ft_fight(&DonnieMatrix, &FrauFarbissina, HEADBUTT);
+    ft_fight(&DonnieMatrix, &FrauFarbissina, HEADBUTT);
+    ft_fight(&DonnieMatrix, &FrauFarbissina, HEADBUTT);
+    ft_fight(&DonnieMatrix, &FrauFarbissina, HEADBUTT);
+    ft_fight(&DonnieMatrix, &FrauFarbissina, HEADBUTT);
+    ft_fight(&DonnieMatrix, &FrauFarbissina, HEADBUTT);
+
 
     return (0);
 }
