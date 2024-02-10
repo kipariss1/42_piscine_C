@@ -1,6 +1,6 @@
-#include "libstr_with_std.h"
+#include "libstr.h"
 
-char** split_string(char *str, char delimeter){
+char** std_split_string(char *str, char delimeter){
     // counting how many parts it will be splitted to
     int n_of_substrings = 1;
     for (int i=0; str[i]!='\0'; i++){

@@ -1,6 +1,8 @@
 #ifndef __LIBSTR_H__
 #define __LIBSTR_H__
 
+#include <stdlib.h>             // include for functions, which requires it  (has std_.*.c in its name)
+
 extern const int L_BIG;         // low border of big letters in ascii
 extern const int H_BIG;         // high border of big letters in ascii
 extern const int L_SMALL;       // low border of small letters in ascii
@@ -19,5 +21,6 @@ int is_letter(char ch);                                             // checks if
 int strcmp(char *str1, char *str2);                                 // compares strings, returnes difference of first different char in strings
 void strip_non_letters(char *str);                                  // strips non letter chars from beginning and end of the string
 void to_lowercase(char *str);                                       // makes string lowercase
+char** std_split_string(char *str, char delimeter);                 // splits string with delimeter !requires stdlib.h!
 
 #endif
