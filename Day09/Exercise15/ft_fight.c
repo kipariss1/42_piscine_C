@@ -32,7 +32,6 @@ void ft_fight(t_perso *attacker, t_perso *defendant, t_attack attack){
         return;
     }
 
-    // TODO: finish this
     int len_attack;
     switch (attack)
     {
@@ -73,7 +72,7 @@ void ft_fight(t_perso *attacker, t_perso *defendant, t_attack attack){
         my_strcat(res, defendant->name);
         my_strcat(res, fight_template3);
 
-        defendant->life = defendant->life - 15;
+        defendant->life = defendant->life - 5;
         ft_putstr(res);
 
         if (defendant->life<=0){
@@ -96,7 +95,7 @@ void ft_fight(t_perso *attacker, t_perso *defendant, t_attack attack){
         my_strcat(res, defendant->name);
         my_strcat(res, fight_template3);
 
-        defendant->life = defendant->life - 15;
+        defendant->life = defendant->life - 20;
         ft_putstr(res);
 
         if (defendant->life<=0){
