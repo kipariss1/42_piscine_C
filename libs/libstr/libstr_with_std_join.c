@@ -1,7 +1,6 @@
-#include <stdlib.h>
 #include "libstr.h"
 
-char* ft_join(char **tab, char *sep){
+char* std_join(char **tab, char *sep){
 
     unsigned int res_len = 0;
     int tab_len;
@@ -23,14 +22,4 @@ char* ft_join(char **tab, char *sep){
     my_strlcat(res, tab[i], res_len);
 
     return res;
-}
-
-int main(){
-
-    char *tab[] = {"apple", "banana", "milk", "chicken", 0};
-    char sep[] = ", ";
-
-    char *res = ft_join(tab, sep);
-
-    return (0);
 }

@@ -11,7 +11,7 @@ unsigned int my_strlcat(char *dest, char *src, unsigned int size) {
     }
 
     // strlcat is guaranteed to end dest with \0
-    dest[i] = '\0'; 
+    dest[dest_filled_part_len+i] = '\0'; 
 
     return i;
 }

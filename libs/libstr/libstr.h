@@ -9,7 +9,7 @@ extern const int L_SMALL;       // low border of small letters in ascii
 extern const int H_SMALL;       // high border of small letters in ascii
 extern const int OFFSET;        // offset from uppercase to lowercase in ascii
 
-void initstr(char *str, unsigned int strlen);                    // init string in main(): assign '\0' to every member of char array
+void initstr(char *str, unsigned int strlen);                       // init string in main(): assign '\0' to every member of char array
 int my_strlen(char *str);                                           // find length of string
 char* my_strcat(char *dest, char *src);                             // concatinate strings, destination has to have enough space
 char* my_strcpy(char *dest, char *src);                             // copy string from src to destination, dest has to have enought space
@@ -22,5 +22,6 @@ int strcmp(char *str1, char *str2);                                 // compares 
 void strip_non_letters(char *str);                                  // strips non letter chars from beginning and end of the string
 void to_lowercase(char *str);                                       // makes string lowercase
 char** std_split_string(char *str, char delimeter);                 // splits string with delimeter !requires stdlib.h!
+char* std_join(char **tab, char *sep);                              // joins strings from "tab" one by one, separated by "sep" !requires stdlib.h!
 
 #endif
