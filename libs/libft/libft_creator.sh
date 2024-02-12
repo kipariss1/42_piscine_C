@@ -1,7 +1,7 @@
 rm *.o
 rm *.a
 
-gcc -c *.c
-ar rcs libft.a *.o
+gcc -c srcs/*.c
+ar rcs libft.a srcs/*.o
 
 ranlib libft.a
