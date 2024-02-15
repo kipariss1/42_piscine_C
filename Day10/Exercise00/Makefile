@@ -1,20 +1,29 @@
 CC = gcc
-CFLAGS = -Wall
+CFLAGS = -c -Wall
 
-SRC_FILES=$(wildcard ../../libst/libft/*.c)	# listing all .c files in dir
-OBJ_FILES=$(SRC:.c=.o)	# substituting .c for .o
+SRC_FILES=$(wildcard srcs/*.c)	# listing all .c files in srcs
+INCLUDE_FLAG=-I./includes/
+
 NAME=libft.a		# defining output
 
-all: $(NAME) clean	# checks if libft.a exists, if yes - move to the next line
+all : $(NAME) clean		# main target of makefile
+	$(info main target)
+
+obj_files : $(SRC_FILES)
+	$(info generating object files)
+	$(CC) $(CFLAGS) $(SRC_FILES) $(INCLUDE_FLAG) 
+
+$(NAME) : obj_files
+	$(info adding generated .o to archive)
+	ar rsc $(NAME) *.o
 
 clean:
-	rm -f $(OBJ_FILES)
+	$(info cleaning)
+	rm -f *.o	
 
-$(NAME) : $(OBJ_FILES)
-	ar rcs $(NAME) $(OBJ_FILES)
+fclean: clean
+	$(info cleaning good)
+	rm -f $(NAME)
 
-$(OBJ_FILES) : $(SRC_FILES)
-	$(CC) -c $(CFLAGS) $(SRC_FILES) 
-
-# TODO: finish with all the requirments from task	
-	
+re: fclean $(NAME)
+	rm -f *.o
