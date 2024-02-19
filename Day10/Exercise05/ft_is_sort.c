@@ -1,6 +1,6 @@
 int ft_is_sort(int *tab, int length, int(*f)(int,int)){
     for (int i=0; i<length-1; i++){
-        if (compare(tab[i+1], tab[i])<0){
+        if (f(tab[i+1], tab[i])<0){
             return 0;
         }
     }
