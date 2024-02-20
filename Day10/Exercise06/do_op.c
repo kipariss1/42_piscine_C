@@ -69,6 +69,8 @@ int do_calculation(int ac, char *av[]){
     else if (operand[0]=='%') {
         return first_arg_int % second_arg_int;
     }
+
+    return 0;
 }
 
 int main(int argc, char *argv[]){
