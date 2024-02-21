@@ -1,5 +1,5 @@
 CC = gcc
-CFLAGS = -Wall
+CFLAGS = -Wall -g3
 NAME = advanced_do_op
 INCLUDE_DIR = -I../../libs/libft/includes
 LIB_DIR = -L../../libs/libft/

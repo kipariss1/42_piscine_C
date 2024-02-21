@@ -1,21 +1,30 @@
 #include "libft.h"
 #include "ft_opp.h"
 
+// check validity and format if operator is not valid
 int is_valid_operand(char *test_str){
-    char valid_operands[] = "+-/%";
+    char valid_operands[] = "+-*/%";
+
+    int is_valid_flag = 1;
+    unsigned int len_test_str = 0;
 
     // if operand has more than one symbol, it's invalid
     for (int i=0; test_str[i]!='\0'; i++){
         if (i>0){
-            return 0;
+            is_valid_flag = 0;
+        }
+        len_test_str++;
+    }
+    
+    if (is_valid_flag){
+        for (int i=0; valid_operands[i]!='\0'; i++){
+            if (test_str[0]==valid_operands[i]){
+                return 1;
+            }
         }
     }
 
-    for (int i=0; valid_operands[i]!='\0';i++){
-        if (test_str[0]==valid_operands[i]){
-            return 1;
-        }
-    }
+    ft_initstr(test_str, len_test_str);         // formatting the string
 
     return 0;
 }
@@ -41,15 +50,21 @@ void parse_arg(char *arg){
     }
 }
 
-int do_calculation(int ac, char *av[]){
-
-    char *first_arg = av[1];
-    char *operand = av[2];
-    char *second_arg = av[3];
-
-    if (!is_valid_operand(operand)){
-        return 0;
+t_opp* get_operation_by_operator(char *operator){
+    int i;
+    for (i=0; g_opptab[i].ft_operator[0]!='\0'; i++){
+        if (ft_strcmp(operator, g_opptab[i].ft_operator)==0){
+            return &g_opptab[i];
+        }
     }
+    if (ft_strcmp(operator, g_opptab[i].ft_operator)==0){
+        return &g_opptab[i];
+    }
+
+    return 0;    
+}
+
+int do_calculation(char *first_arg, char *second_arg, int(*f)(int,int)){
 
     // leaves only first digits in args
     parse_arg(first_arg);
@@ -58,24 +73,11 @@ int do_calculation(int ac, char *av[]){
     int first_arg_int = ft_str_to_int(first_arg);
     int second_arg_int = ft_str_to_int(second_arg);
 
-    if (operand[0]=='+'){
-        return first_arg_int + second_arg_int;
-    }
-    else if (operand[0]=='-') {
-        return first_arg_int - second_arg_int;
-    }
-    else if (operand[0]=='/') {
-        return first_arg_int / second_arg_int;
-    }
-    else if (operand[0]=='%') {
-        return first_arg_int % second_arg_int;
-    }
-
-    return 0;
+    return f(first_arg_int, second_arg_int);
 }
 
 int main(int argc, char *argv[]){
-    // check the input args
+    // check the input args (arguments, operator)
     parse_arg(argv[3]);
     if (!ft_strcmp(argv[3], "0") && (argv[2][0]=='/')){
         ft_putstr("Stop : division by zero");
@@ -90,10 +92,14 @@ int main(int argc, char *argv[]){
         return 0;
     }
 
-    // do main calculation
+    is_valid_operand(argv[2]);
+
     int res_is_negative = 0;
-    int res = do_calculation(argc, argv);
-    if (res==0){
+
+    // do main calculation
+    // "get_operation_by_operator" returns pointer to function by symbol
+    int res = do_calculation(argv[1], argv[3], get_operation_by_operator(argv[2])->operation);
+    if ((res==0) && (ft_strcmp(argv[2], ""))){
         ft_putstr("0");
         ft_putchar('\n');
         return (0);
@@ -104,7 +110,6 @@ int main(int argc, char *argv[]){
     }
 
     // do the res conversion from int to str
-
     int len_res = 0;
     int res_copy = res;
     while (res_copy!=0){

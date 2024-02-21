@@ -1,11 +1,11 @@
 #ifndef __ADDITIONAL_FT_OPP__
 #define __ADDITIONAL_FT_OPP__
 
-typedef struct t_opp
+typedef struct s_opp
 {
     char *ft_operator;
     int (*operation)(int, int);
-} s_opp;
+} t_opp;
 
 
 int ft_sub(int, int);
