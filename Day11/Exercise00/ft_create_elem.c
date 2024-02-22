@@ -14,8 +14,8 @@ int main(){
 
     int a = 18;
     char *b = "this is one type of data";
-    t_list* res = ft_create_elem((char*)b);
-    res->next = ft_create_elem((int*)&a);
+    t_list* res = ft_create_elem(b);
+    res->next = ft_create_elem(&a);
 
     return (0);
 }
