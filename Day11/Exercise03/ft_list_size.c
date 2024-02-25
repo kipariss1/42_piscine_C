@@ -20,6 +20,7 @@ int ft_list_size(t_list *begin_list){
     for (curr = begin_list; curr->next!=0x00; curr=curr->next){
         len++;
     }
+    len++;
 
     return len;
 }
