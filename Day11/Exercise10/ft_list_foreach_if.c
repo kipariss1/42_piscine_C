@@ -2,7 +2,7 @@
 #include <stdlib.h>
 
 int compare_func(char *s1, char *s2){
-    return s1-s2;
+    return *s1-*s2;
 }
 
 char *reference = "3 test data";
@@ -19,7 +19,9 @@ void ft_list_foreach_if(t_list *begin_list, void (*f)(void*), int(*cmp)()){
             f(curr->data);
         }
     }
-    f(curr->data);
+    if (!cmp(curr->data, reference)){
+        f(curr->data);
+    }
 }
 
 void ft_list_push_back(t_list **begin_list, void *data){
@@ -41,12 +43,11 @@ void ft_list_push_back(t_list **begin_list, void *data){
 int main(){
 
     t_list **list_array = (t_list**)malloc(sizeof(t_list));
-    char* a,* b,* c,* d,* e;
-    a = "1 test data";
-    b = "2 test data";
-    c = "3 test data";
-    d = "4 tets data";
-    e = "5 test data";
+    char a[] = "1 test data";
+    char b[] = "2 test data";
+    char c[] = "3 test data";
+    char d[] = "4 tets data";
+    char e[] = "5 test data";
     ft_list_push_back(list_array, a);
     ft_list_push_back(list_array, b);
     ft_list_push_back(list_array, c);
