@@ -25,6 +25,7 @@ void read_and_print_file(char *filepath){
 int main(int argc, char *argv[]){
 
     if (argc == 1){
+        // Maybe read of the standard input should be implemented here
         write(1, "No files selected to catinate \n", 31);
     }
 
