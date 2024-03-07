@@ -3,6 +3,7 @@
 
 void ft_putchar(char c);
 void ft_putstr(char* str);
+void ft_putnbr(int n);
 int ft_strlen(char *str);
 char* ft_strcat(char *dest, char *src);
 int ft_strcmp(char* s1, char* s2);
