@@ -149,6 +149,7 @@ int main(int argc, char *argv[]){
             tail(argv[i]);
         }
 
+        // TODO: fix this, argc will be lowering automatically
         if (i<--argc){
             ft_putstr("\n");
         }
