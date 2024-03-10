@@ -17,5 +17,7 @@ int ft_iterative_power(int nb, int power);
 int ft_str_to_int(char *str);
 void ft_int_to_str(char *buffer, int convert_from, int len_convert_from);
 int ft_str_is_numeric(char* str);
+char* ft_convert_base(char *nbr, char *base_from, char *base_to);
+char* ft_int_to_str_malloc(int convert_from);
 
 #endif
