@@ -91,7 +91,8 @@ char* ft_convert_base(char *nbr, char *base_from, char *base_to){
         converted_num_copy = converted_num_copy/dest_base_len;
     }
 
-    char *converted_num = (char*)malloc(base_to_n_of_digits*sizeof(char)); 
+    char *converted_num = (char*)malloc(base_to_n_of_digits*sizeof(char));
+    ft_initstr(converted_num, base_to_n_of_digits);
 
     translate_to_base_system(decimal_num, dest_base_len, base_to, converted_num);
 

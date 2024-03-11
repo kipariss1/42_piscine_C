@@ -25,6 +25,7 @@ char* ft_int_to_str_malloc(int convert_from){
     }
 
     char *res = (char*)malloc(len_of_int*sizeof(char));
+    ft_initstr(res, len_of_int);
 
     int ascii_offset = 48;
     for (int i=0; i<len_of_int; i++){

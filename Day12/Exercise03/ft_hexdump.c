@@ -68,6 +68,7 @@ void hexdump(char *file){
             ft_putstr(" ");
         }
         // putting byte read, from file
+        // TODO: somehow fix the freeing of allocated space
         ft_putstr(ft_convert_base(ft_int_to_str_malloc(curr_char), base_from, base_to));
 
         byte_counter++;
