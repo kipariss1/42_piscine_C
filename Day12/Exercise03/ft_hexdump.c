@@ -59,6 +59,7 @@ void hexdump(char *file){
     int curr_char;
     int byte_counter = 0;
     int first_time = 1;
+    int size_of_file = get_file_size(fd);
     int curr_offset = lseek(fd, 1, SEEK_SET);
     
     while (read(fd, &curr_char, 1)>0){
@@ -80,9 +81,11 @@ void hexdump(char *file){
         }
         // putting byte read, from file
         // TODO: somehow fix the freeing of allocated space
-        char *str_curr_char = ft_int_to_str_malloc(curr_char); 
-        ft_putstr(ft_convert_base(str_curr_char, base_from, base_to));
+        char *str_curr_char = ft_int_to_str_malloc(curr_char);
+        char *convtd_curr_char = ft_convert_base(str_curr_char, base_from, base_to); 
+        ft_putstr(convtd_curr_char);
 
+        free(convtd_curr_char);
         free(str_curr_char);
 
         // handling the offset to mimic little endian
@@ -98,6 +101,7 @@ void hexdump(char *file){
 
     ft_putstr("\n"); 
     (void)curr_offset;
+    (void)size_of_file;
     return;
 }
 
