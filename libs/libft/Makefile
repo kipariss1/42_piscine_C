@@ -1,5 +1,5 @@
 CC = gcc
-CFLAGS = -c -Wall
+CFLAGS = -c -Wall -g3
 
 SRC_FILES=$(wildcard srcs/*.c)	# listing all .c files in srcs
 INCLUDE_FLAG=-I./includes/
