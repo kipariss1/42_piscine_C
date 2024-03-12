@@ -15,14 +15,14 @@ int get_file_size(int fd){
     return res;
 }
 
-void ft_put_rownbr_to_template(char *row_nbr, char *template){
+void put_hex_to_template(char *hex, char *template){
 
-    int len_row_nbr = ft_strlen(row_nbr);
+    int len_hex = ft_strlen(hex);
     int len_template = ft_strlen(template);
 
 
-    for (len_row_nbr--, len_template--; len_row_nbr >= 0 && len_template >= 0; len_row_nbr--, len_template--){
-        template[len_template] = row_nbr[len_row_nbr];
+    for (len_hex--, len_template--; len_hex >= 0 && len_template >= 0; len_hex--, len_template--){
+        template[len_template] = hex[len_hex];
     } 
 
     return;
@@ -58,10 +58,12 @@ void hexdump(char *file){
 
     int curr_char;
     int byte_counter = 0;
+    int row_counter = 0;
     int first_time = 1;
     int size_of_file = get_file_size(fd);
     int curr_offset = lseek(fd, 1, SEEK_SET);
     int read_bytes;
+    int only_one_odd_byte_left = 0;
     
     while (1){
         read_bytes = read(fd, &curr_char, 1);
@@ -76,30 +78,47 @@ void hexdump(char *file){
             else {
                 first_time = 0;
             }
-            char *str_byte_counter = ft_int_to_str_malloc(byte_counter);
+
+            row_counter = byte_counter;
+            char *str_byte_counter = ft_int_to_str_malloc(row_counter);
             char *row_nbr = ft_convert_base(str_byte_counter, base_from, base_to);
             char template[] = "00000000";
-            ft_put_rownbr_to_template(row_nbr, template);
+            put_hex_to_template(row_nbr, template);
             ft_putstr(template);
             // free(str_byte_counter);
             // free(row_nbr);
         }
         if (!(byte_counter%0x02)){
             ft_putstr(" ");
+            if (only_one_odd_byte_left){
+                ft_putstr("00");
+            }
         }
         // putting byte read, from file
         char *str_curr_char = ft_int_to_str_malloc(curr_char);
-        char *convtd_curr_char = ft_convert_base(str_curr_char, base_from, base_to); 
-        ft_putstr(convtd_curr_char);
+        char *convtd_curr_char = ft_convert_base(str_curr_char, base_from, base_to);
+        char template[] = "00";
+        put_hex_to_template(convtd_curr_char, template);
+        ft_putstr(template);
 
         free(convtd_curr_char);
         free(str_curr_char);
 
-        // TODO: use put_row_number_in_template to put char<16
+        // breaking here if only one odd byte left and it's handled
+        if (only_one_odd_byte_left){
+            byte_counter++;
+            break;
+        }
 
         // handling the offset to mimic little endian
         if (byte_counter%0x02){
-            curr_offset = lseek(fd, 2, SEEK_CUR);
+            if ((size_of_file-curr_offset)>2){
+                curr_offset = lseek(fd, 2, SEEK_CUR);
+            }
+            else{       // if we reached the end of file and there is no space to move offset 2 chars away -> move 1 char away 
+                curr_offset = lseek(fd, 1, SEEK_CUR);
+                only_one_odd_byte_left = 1;
+            }
         }
         else {
             curr_offset = lseek(fd, -2, SEEK_CUR);
@@ -108,7 +127,29 @@ void hexdump(char *file){
         byte_counter++;
     }       
 
-    ft_putstr("\n"); 
+    // putting the last 16 empty bytes in the end
+    int empty_lines = ++byte_counter + 0x10;
+    while (byte_counter<empty_lines){
+        if (!(byte_counter%0x10)){
+            ft_putstr("\n");
+            char *str_byte_counter = ft_int_to_str_malloc(row_counter+0xf);
+            char *row_nbr = ft_convert_base(str_byte_counter, base_from, base_to);
+            char template[] = "00000000";
+            put_hex_to_template(row_nbr, template);
+            ft_putstr(template);
+            // free(str_byte_counter);
+            // free(row_nbr);
+        }
+        if (!(byte_counter%0x02)){
+            ft_putstr(" ");
+        }
+        ft_putstr("  ");
+        byte_counter++;
+         
+    }
+
+    ft_putstr("\n");
+
     (void)curr_offset;
     (void)size_of_file;
     return;
