@@ -7,6 +7,14 @@
 char *base_from = "0123456789";
 char *base_to = "0123456789abcdef";
 
+int get_file_size(int fd){
+    lseek(fd, 0, SEEK_SET);
+    int res = lseek(fd, 0, SEEK_END);
+    lseek(fd, 0, SEEK_SET);
+
+    return res;
+}
+
 void ft_put_rownbr_to_template(char *row_nbr, char *template){
 
     int len_row_nbr = ft_strlen(row_nbr);
