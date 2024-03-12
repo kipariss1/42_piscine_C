@@ -10,7 +10,7 @@ all:
 
 clean:
 	find . -type d ! \( -name ".vscode" -o -name . -o -name .. \) -exec rmdir {} \;
-	find . -type f ! \( -name $(SRC) -o -name $(OUT) -o -name test1.txt -o -name test2.txt -o -name Makefile \) -exec rm -f {} \;
+	find . -type f ! \( -name $(SRC) -o -name $(OUT) -o -name test1.txt -o -name test2.txt -o -name Makefile -o -name launch.json -o -name tasks.json \) -exec rm {} \;
 
 fclean: clean
 	rm -f $(OUT)
