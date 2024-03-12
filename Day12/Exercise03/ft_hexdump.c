@@ -61,8 +61,14 @@ void hexdump(char *file){
     int first_time = 1;
     int size_of_file = get_file_size(fd);
     int curr_offset = lseek(fd, 1, SEEK_SET);
+    int read_bytes;
     
-    while (read(fd, &curr_char, 1)>0){
+    while (1){
+        read_bytes = read(fd, &curr_char, 1);
+        if (read_bytes<=0){
+            break;
+        }
+        curr_offset = curr_offset + read_bytes;
         if (!(byte_counter%0x10)){
             if (!first_time){
                 ft_putstr("\n");
@@ -70,23 +76,27 @@ void hexdump(char *file){
             else {
                 first_time = 0;
             }
-            char* row_nbr = ft_convert_base(ft_int_to_str_malloc(byte_counter), base_from, base_to);
+            char *str_byte_counter = ft_int_to_str_malloc(byte_counter);
+            char *row_nbr = ft_convert_base(str_byte_counter, base_from, base_to);
             char template[] = "00000000";
             ft_put_rownbr_to_template(row_nbr, template);
             ft_putstr(template);
             ft_putstr(" ");
+            free(str_byte_counter);
+            free(row_nbr);
         }
         if (!(byte_counter%0x02)){
             ft_putstr(" ");
         }
         // putting byte read, from file
-        // TODO: somehow fix the freeing of allocated space
         char *str_curr_char = ft_int_to_str_malloc(curr_char);
         char *convtd_curr_char = ft_convert_base(str_curr_char, base_from, base_to); 
         ft_putstr(convtd_curr_char);
 
         free(convtd_curr_char);
         free(str_curr_char);
+
+        // TODO: use put_row_number_in_template to put char<16
 
         // handling the offset to mimic little endian
         if (byte_counter%0x02){
