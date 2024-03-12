@@ -9,6 +9,8 @@ all:
 	$(CC) $(SRC) $(I) $(L) $(FLAGS) -o $(OUT)
 
 clean:
-	rm -f $(OUT)
+	find . -type d ! \( -name ".vscode" -o -name . -o -name .. \) -exec rmdir {} \;
+	find . -type f ! \( -name $(SRC) -o -name $(OUT) -o -name test1.txt -o -name test2.txt -o -name Makefile \) -exec rm -f {} \;
 
 fclean: clean
+	rm -f $(OUT)
