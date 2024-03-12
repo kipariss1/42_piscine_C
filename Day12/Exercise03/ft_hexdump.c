@@ -1,6 +1,7 @@
 #include <unistd.h>
 #include <fcntl.h>
 #include <errno.h>
+#include <stdlib.h>
 #include "libft.h"
 
 char *base_from = "0123456789";
@@ -50,6 +51,8 @@ void hexdump(char *file){
     int curr_char;
     int byte_counter = 0;
     int first_time = 1;
+    lseek(fd, 1, SEEK_SET);
+    
     while (read(fd, &curr_char, 1)>0){
         if (!(byte_counter%0x10)){
             if (!first_time){
@@ -69,7 +72,18 @@ void hexdump(char *file){
         }
         // putting byte read, from file
         // TODO: somehow fix the freeing of allocated space
-        ft_putstr(ft_convert_base(ft_int_to_str_malloc(curr_char), base_from, base_to));
+        char *str_curr_char = ft_int_to_str_malloc(curr_char); 
+        ft_putstr(ft_convert_base(str_curr_char, base_from, base_to));
+
+        free(str_curr_char);
+
+        // handling the offset to mimic little endian
+        if (byte_counter%0x02){
+            lseek(fd, 2, SEEK_CUR);
+        }
+        else {
+            lseek(fd, -2, SEEK_CUR);
+        }
 
         byte_counter++;
     }       
