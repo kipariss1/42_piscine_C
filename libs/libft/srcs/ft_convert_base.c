@@ -18,8 +18,8 @@ void translate_to_base_system(int digit, int base, char* base_system, char* dest
         translate_to_base_system(digit/base, base, base_system, dest);
     }
 
-    char *base_digit = (char*)malloc(1*sizeof(char));
-    *base_digit = base_system[remainder]; 
+    char base_digit[1];
+    base_digit[0] = base_system[remainder]; 
     ft_strcat(dest, base_digit);
 }
 

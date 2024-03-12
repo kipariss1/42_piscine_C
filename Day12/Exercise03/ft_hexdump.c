@@ -81,9 +81,8 @@ void hexdump(char *file){
             char template[] = "00000000";
             ft_put_rownbr_to_template(row_nbr, template);
             ft_putstr(template);
-            ft_putstr(" ");
-            free(str_byte_counter);
-            free(row_nbr);
+            // free(str_byte_counter);
+            // free(row_nbr);
         }
         if (!(byte_counter%0x02)){
             ft_putstr(" ");
