@@ -51,7 +51,7 @@ void hexdump(char *file){
     int curr_char;
     int byte_counter = 0;
     int first_time = 1;
-    lseek(fd, 1, SEEK_SET);
+    int curr_offset = lseek(fd, 1, SEEK_SET);
     
     while (read(fd, &curr_char, 1)>0){
         if (!(byte_counter%0x10)){
@@ -79,17 +79,17 @@ void hexdump(char *file){
 
         // handling the offset to mimic little endian
         if (byte_counter%0x02){
-            lseek(fd, 2, SEEK_CUR);
+            curr_offset = lseek(fd, 2, SEEK_CUR);
         }
         else {
-            lseek(fd, -2, SEEK_CUR);
+            curr_offset = lseek(fd, -2, SEEK_CUR);
         }
 
         byte_counter++;
     }       
 
     ft_putstr("\n"); 
-
+    (void)curr_offset;
     return;
 }
 
