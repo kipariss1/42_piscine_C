@@ -47,10 +47,47 @@ void hexdump_canonical(char *file){
 
     int fd = check_file(file);
 
-    (void)fd;
+    int curr_char;
+    int byte_counter = 0;
+    int row_counter = 0;
+    int first_time = 1;
+    int size_of_file = get_file_size(fd);
+    int curr_offset = lseek(fd, 1, SEEK_SET);
+    int read_bytes;
+    int only_one_odd_byte_left = 0;
+
+    int line_len = 69;
+
+    int line_number = size_of_file/line_len;
+    int begin_of_bytes = 10; 
+    int begin_of_text = 52;
+    int end_of_text = 67;
+    
+    char buff[++line_number][line_len];
+    // putting '|' in template
+    for (int i = 0; i<line_number; i++){
+        buff[i][--begin_of_text] = '|';
+        begin_of_text++;
+        buff[i][++end_of_text] = '|';
+        end_of_text--;
+    }
+
+    while (1){
+
+        read_bytes = read(fd, &curr_char, 1);
+        if (read_bytes<=0){
+            break;
+        }
+        curr_offset = curr_offset + read_bytes;
+
+          
+
+    }
 
     return;
 }
+
+// template: 00000200 7466 6177 6572 6c20 6b69 2065 6c41 7564  |Lorem Ipsum is s| 
 
 void hexdump(char *file){
 
