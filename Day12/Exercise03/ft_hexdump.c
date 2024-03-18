@@ -17,6 +17,10 @@ int get_file_size(int fd){
 
 void put_hex_to_template(char *hex, char *template){
 
+    if (hex == 0x00){
+        return;
+    }
+
     int len_hex = ft_strlen(hex);
     int len_template = ft_strlen(template);
 
@@ -73,7 +77,7 @@ void hexdump_canonical(char *file){
         buff[i][line_len-1] = '\n';
         buff[i][begin_of_bytes-1] = ' ';
         buff[i][begin_of_bytes-2] = ' ';
-        buff[i][line_len+1] = '\0';
+        buff[i][line_len] = '\0';
 
         char *str_byte_counter = ft_int_to_str_malloc(i*0x10);
         char *row_nbr = ft_convert_base(str_byte_counter, base_from, base_to);
@@ -98,7 +102,9 @@ void hexdump_canonical(char *file){
         if (!(byte_counter%0x10)){
             line_offset_for_bytes = 0;
         }
-
+        if (curr_char == '\n' || curr_char == '\t'){
+            curr_char = '.';
+        }
         buff[byte_counter/0x10][begin_of_text + byte_counter%0x10] = (char)curr_char;  
 
         char *str_curr_char = ft_int_to_str_malloc(curr_char);
@@ -119,9 +125,14 @@ void hexdump_canonical(char *file){
         byte_counter++;
     }
 
-    while (!(byte_counter%0x10)){
+    buff[byte_counter/0x10][begin_of_text + byte_counter%0x10] = '|';
+    buff[byte_counter/0x10][begin_of_text + byte_counter%0x10 + 1] = '\0';
 
-        buff[byte_counter/0x10][begin_of_text + byte_counter%0x10] = ' ';
+    int final_byte_count = size_of_file;
+
+    while (byte_counter%0x10){
+
+        // buff[byte_counter/0x10][begin_of_text + byte_counter%0x10] = ' ';
 
         buff[byte_counter/0x10][begin_of_bytes + line_offset_for_bytes++] = ' '; 
         buff[byte_counter/0x10][begin_of_bytes + line_offset_for_bytes++] = ' '; 
@@ -131,11 +142,20 @@ void hexdump_canonical(char *file){
         }
 
         byte_counter++;
-    }
+    } 
 
     for (int i=0; i<line_number; i++){
         ft_putstr(buff[i]);
     }
+
+    ft_putstr("\n");
+    char *str_byte_counter = ft_int_to_str_malloc(final_byte_count);
+    char *row_nbr = ft_convert_base(str_byte_counter, base_from, base_to);
+    char template[] = "00000000";
+    put_hex_to_template(row_nbr, template);
+    ft_putstr(template);
+    free(str_byte_counter);
+    free(row_nbr);
     
     (void)byte_counter;
     (void)curr_char;
@@ -163,7 +183,7 @@ void hexdump(char *file){
 
     int fd = check_file(file);
 
-    int curr_char;
+    char curr_char;
     int byte_counter = 0;
     int row_counter = 0;
     int first_time = 1;
@@ -235,11 +255,15 @@ void hexdump(char *file){
     }       
 
     // putting the last 16 empty bytes in the end
-    int empty_lines = ++byte_counter + 0x10;
+    if (size_of_file%2){
+        byte_counter++;
+    }
+    int increment = (size_of_file%2) ? 0xf : 0xe; 
+    int empty_lines = byte_counter + 0x10;
     while (byte_counter<empty_lines){
         if (!(byte_counter%0x10)){
             ft_putstr("\n");
-            char *str_byte_counter = ft_int_to_str_malloc(row_counter+0xf);
+            char *str_byte_counter = ft_int_to_str_malloc(row_counter+increment);
             char *row_nbr = ft_convert_base(str_byte_counter, base_from, base_to);
             char template[] = "00000000";
             put_hex_to_template(row_nbr, template);
