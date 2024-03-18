@@ -52,26 +52,41 @@ void hexdump_canonical(char *file){
     int row_counter = 0;
     int first_time = 1;
     int size_of_file = get_file_size(fd);
-    int curr_offset = lseek(fd, 1, SEEK_SET);
+    int curr_offset = 0;
     int read_bytes;
     int only_one_odd_byte_left = 0;
 
-    int line_len = 69;
+    int line_len = 78;
+    int char_num = 16;
 
-    int line_number = size_of_file/line_len;
+    int line_number = size_of_file/char_num + 1;
     int begin_of_bytes = 10; 
-    int begin_of_text = 52;
-    int end_of_text = 67;
+    int begin_of_text = 60;
+    int end_of_text = 75;
     
-    char buff[++line_number][line_len];
-    // putting '|' in template
+    char buff[line_number][line_len+1];
+    // putting '|' and row nbr in template
     for (int i = 0; i<line_number; i++){
-        buff[i][--begin_of_text] = '|';
-        begin_of_text++;
-        buff[i][++end_of_text] = '|';
-        end_of_text--;
+
+        buff[i][begin_of_text-1] = '|';
+        buff[i][end_of_text+1] = '|';
+        buff[i][line_len-1] = '\n';
+        buff[i][begin_of_bytes-1] = ' ';
+        buff[i][begin_of_bytes-2] = ' ';
+        buff[i][line_len+1] = '\0';
+
+        char *str_byte_counter = ft_int_to_str_malloc(i*0x10);
+        char *row_nbr = ft_convert_base(str_byte_counter, base_from, base_to);
+        char template[] = "00000000";
+        put_hex_to_template(row_nbr, template);
+
+        for (int j = 0; template[j]!='\0'; j++){
+            buff[i][j] = template[j];
+        }
+ 
     }
 
+    int line_offset_for_bytes = 0;
     while (1){
 
         read_bytes = read(fd, &curr_char, 1);
@@ -80,14 +95,69 @@ void hexdump_canonical(char *file){
         }
         curr_offset = curr_offset + read_bytes;
 
-          
+        if (!(byte_counter%0x10)){
+            line_offset_for_bytes = 0;
+        }
 
+        buff[byte_counter/0x10][begin_of_text + byte_counter%0x10] = (char)curr_char;  
+
+        char *str_curr_char = ft_int_to_str_malloc(curr_char);
+        char *convtd_curr_char = ft_convert_base(str_curr_char, base_from, base_to);
+        char template[] = "00";
+        put_hex_to_template(convtd_curr_char, template);
+
+        buff[byte_counter/0x10][begin_of_bytes + line_offset_for_bytes++] = template[0]; 
+        buff[byte_counter/0x10][begin_of_bytes + line_offset_for_bytes++] = template[1]; 
+        buff[byte_counter/0x10][begin_of_bytes + line_offset_for_bytes++] = ' ';
+        if (byte_counter%0x10 == 7){
+            buff[byte_counter/0x10][begin_of_bytes + line_offset_for_bytes++] = ' ';
+        }
+
+        free(convtd_curr_char);
+        free(str_curr_char);
+
+        byte_counter++;
     }
+
+    while (!(byte_counter%0x10)){
+
+        buff[byte_counter/0x10][begin_of_text + byte_counter%0x10] = ' ';
+
+        buff[byte_counter/0x10][begin_of_bytes + line_offset_for_bytes++] = ' '; 
+        buff[byte_counter/0x10][begin_of_bytes + line_offset_for_bytes++] = ' '; 
+        buff[byte_counter/0x10][begin_of_bytes + line_offset_for_bytes++] = ' ';
+        if (byte_counter%0x10 == 7){
+            buff[byte_counter/0x10][begin_of_bytes + line_offset_for_bytes++] = ' ';
+        }
+
+        byte_counter++;
+    }
+
+    for (int i=0; i<line_number; i++){
+        ft_putstr(buff[i]);
+    }
+    
+    (void)byte_counter;
+    (void)curr_char;
+    (void)row_counter;
+    (void)first_time;
+    (void)size_of_file;
+    (void)curr_offset;
+    (void)read_bytes;
+    (void)only_one_odd_byte_left;
+
+    (void)line_len;
+
+    (void)line_number;
+    (void)begin_of_bytes; 
+    (void)begin_of_text;
+    (void)end_of_text;
+    (void)buff;
 
     return;
 }
 
-// template: 00000200 7466 6177 6572 6c20 6b69 2065 6c41 7564  |Lorem Ipsum is s| 
+// template: 00000000  4c 6f 72 65 6d 20 49 70  73 75 6d 20 69 73 20 73  |Lorem Ipsum is s| 
 
 void hexdump(char *file){
 
