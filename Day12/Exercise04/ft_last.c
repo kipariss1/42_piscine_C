@@ -5,6 +5,7 @@
 #include <time.h>
 #include <sys/types.h>
 #include <utmp.h>
+#include "libft.h"
 
 int main(){
 
@@ -18,9 +19,13 @@ int main(){
     }
 
     while (read(fd, &ut, size_utmp) > 0){
-        int a = 1;
-        (void)a;
+        ft_putstr(ut.ut_user);
+        ft_putstr(" ");
+        ft_putstr(ut.ut_host);
+        ft_putstr(" ");
+        ft_putstr("\n");
     }
+    ft_putstr("\n");
 
     return (0);
 }
