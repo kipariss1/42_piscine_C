@@ -7,10 +7,15 @@
 #include <utmp.h>
 #include "libft.h"
 
-int main(){
 
-    struct utmp ut;
-    int size_utmp = sizeof(struct utmp);
+int process_wtmp_file(){
+
+    int quit = 0;       // flag for while cycle
+
+    struct utmp ut;                         // current utmp entry
+    int size_utmp = sizeof(struct utmp);    // size of utmp struct
+
+    time_t begintime;       // when wtmp begins
 
     int fd = open("/var/log/wtmp", O_RDONLY);
     if (fd == -1){
@@ -18,7 +23,26 @@ int main(){
         return -1;
     }
 
-    while (read(fd, &ut, size_utmp) > 0){
+    // Read first structure to capture begintime
+    if (read(fd, &ut, size_utmp) <= 0){
+        // the file is empty or error happen
+        // TODO: print the actual errno
+        return -1;
+    }
+
+    begintime = ut.ut_tv.tv_sec;
+
+    // go to the end of file minus one structure and start reading
+    // wtmp
+    lseek(fd, -size_utmp, SEEK_END);
+
+    while (!quit){
+        // cycle-begin: reading new utmp entry
+        if (read(fd, &ut, size_utmp) <= 0){
+            break;
+        }
+
+        // TODO: cycle-main-part:
         ft_putnbr(ut.ut_type);
         ft_putstr(" ");
         ft_putstr(ut.ut_user);
@@ -31,8 +55,23 @@ int main(){
         strftime(time_str, sizeof(time_str), "%Y-%m-%d %H:%M:%S", timeinfo);
         ft_putstr(time_str);
         ft_putstr("\n");
+ 
+
+        // cycle-end: checking if returning utmp 
+        if (lseek(fd, -2*size_utmp, SEEK_CUR) == 0){
+            break;
+        }
     }
-    ft_putstr("\n");
+
+    (void)begintime;
+
+    return 1;
+}
+
+
+int main(){
+
+    process_wtmp_file();
 
     return (0);
 }
