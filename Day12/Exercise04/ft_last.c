@@ -11,6 +11,13 @@
 # define SHUTDOWN_TIME 254
 #endif
 
+/* month and days declaration */
+char *days[] = {"Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"};
+char *months[] = {"January", "February", "March", "April", "May", "June", 
+                    "July", "August", "September", "October", "November", "December"};
+int days_in_month[] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+int initial_year = 1970;
+
 /* last time formats */
 struct last_timefmt {
     const char *name;
@@ -59,7 +66,7 @@ int time_formatter(int fmt, char *dst, time_t *when){
     switch (fmt)
     {
     case LAST_TIMEFTM_HHMM:
-
+        // convert "when" time to "- 20:27" format
         int mins = (*when / 60) % 60;
         char mins_str[3] = {'\0'};
         ft_int_to_str(mins_str, mins, 2);
@@ -78,7 +85,45 @@ int time_formatter(int fmt, char *dst, time_t *when){
         break;
 
     case LAST_TIMEFTM_CTIME:
-        // TODO: convert "when" to "Sat Mar 23 20:27" fmt
+        // convert "when" time to "Sat Mar 23 20:27" fmt
+        int days_total = *when / 86400;
+        int curr_day_of_the_week = days_total%7;
+
+        int curr_day = 0;
+        int curr_month = 0;
+        int curr_year = initial_year;
+        int days_left_in_month = days_in_month[curr_month];
+        while  (days_total){
+            if (!days_left_in_month){
+                if (curr_month == 11){
+                    curr_month = 0;
+                    curr_year++;
+
+                    // if is leap year
+                    if ((!(curr_year%4) && (curr_year%100)) || (!(curr_year%400))){
+                        days_in_month[1] = 29;
+                    }
+                    else {
+                        days_in_month[1] = 28;
+                    }
+                }
+                else {
+                    curr_month++;
+                }
+                
+                days_left_in_month = days_in_month[curr_month];
+                curr_day = 0;
+            }
+            days_left_in_month--;
+            days_total--;
+            curr_day++;
+        }
+
+        // TODO: add curr day, month, day of month to dst
+        // TODO: add time to dst
+
+        (void)curr_day_of_the_week;
+
         break;
     }
 
