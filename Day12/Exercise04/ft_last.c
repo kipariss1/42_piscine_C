@@ -7,6 +7,120 @@
 #include <utmp.h>
 #include "libft.h"
 
+#ifndef SHUTDOWN_TIME
+# define SHUTDOWN_TIME 254
+#endif
+
+/* last time formats */
+struct last_timefmt {
+    const char *name;
+    int in_len;
+    int in_fmt;
+    int out_len;
+    int out_fmt;
+};
+
+/* types of listing */
+enum {
+    R_CRASH = 1,
+    R_DOWN,
+    R_NORMAL,
+    R_NOW,
+    R_REBOOT,
+    R_REBOOT_CRASH,
+    R_PHANTOM,
+    R_TIMECHANGE,
+};
+
+/* times of formats */
+enum {
+	LAST_TIMEFTM_NONE = 0,
+	LAST_TIMEFTM_SHORT,
+	LAST_TIMEFTM_CTIME,
+	LAST_TIMEFTM_ISO8601,
+
+	LAST_TIMEFTM_HHMM,	/* non-public */
+};
+
+static struct last_timefmt short_fmt = {
+    .name       = "short",
+    .in_len     = 15,
+    .out_len    = 7,
+    .in_fmt     = LAST_TIMEFTM_CTIME,
+    .out_fmt    = LAST_TIMEFTM_HHMM
+};
+
+
+// Global vars
+long long int lastdate;
+
+int time_formatter(int fmt, char *dst, time_t *when){
+
+    switch (fmt)
+    {
+    case LAST_TIMEFTM_HHMM:
+
+        int mins = (*when / 60) % 60;
+        char mins_str[3] = {'\0'};
+        ft_int_to_str(mins_str, mins, 2);
+
+        int hours = (*when / 3600) % 24;
+        char hours_str[3] = {'\0'};
+        ft_int_to_str(hours_str, hours, 2);
+
+        char time_str[5] = {'\0'};
+        ft_strcpy(time_str, hours_str);
+        ft_strcpy(time_str+2, ":");
+        ft_strcpy(time_str+3, mins_str);
+
+        ft_strcpy(dst, time_str);
+
+        break;
+
+    case LAST_TIMEFTM_CTIME:
+        // TODO: convert "when" to "Sat Mar 23 20:27" fmt
+        break;
+    }
+
+    return 1;
+}
+
+int list(struct utmp *p, time_t logout_time, int what){
+
+    char logouttime[32] = {'\0'};    // str to store logout time
+    char logintime[32] = {'\0'};     // str to store login time
+
+    struct last_timefmt *fmt;
+    time_t utmp_time, secs;
+    int mins, hours, days;
+
+    fmt = &short_fmt;
+    utmp_time = p->ut_tv.tv_sec;
+
+    /* log-out time */
+    secs = logout_time - utmp_time;
+    mins = (secs / 60) % 60;
+    hours = (secs / 3600) % 24;
+    days = secs / 86400;
+
+    // put time in "in" format to logintime
+
+    time_formatter(fmt->in_fmt, logintime, &utmp_time);
+
+    ft_strcpy(logouttime, "- ");
+    // put time in "out" format to logouttime
+    time_formatter(fmt->out_fmt ,logouttime+2, &logout_time);
+
+    (void)what;
+    (void)fmt;
+    (void)secs;
+    (void)mins;
+    (void)hours;
+    (void)days;
+
+    return 0;
+
+}
 
 int process_wtmp_file(){
 
@@ -16,6 +130,7 @@ int process_wtmp_file(){
     int size_utmp = sizeof(struct utmp);    // size of utmp struct
 
     time_t begintime;       // when wtmp begins
+    time_t lastboot = 0;    // last boot time
 
     int fd = open("/var/log/wtmp", O_RDONLY);
     if (fd == -1){
@@ -55,7 +170,40 @@ int process_wtmp_file(){
         strftime(time_str, sizeof(time_str), "%Y-%m-%d %H:%M:%S", timeinfo);
         ft_putstr(time_str);
         ft_putstr("\n");
- 
+
+        lastdate = ut.ut_tv.tv_sec;
+
+        if ((ft_strcmp(ut.ut_line, "~") == 0) && (ft_strcmp(ut.ut_user, "shutdown") == 0)){
+            ut.ut_type = SHUTDOWN_TIME; 
+        }
+
+        switch (ut.ut_type)
+        {
+        case SHUTDOWN_TIME:
+            ft_strcpy(ut.ut_line, "system down");
+            quit = list(&ut, lastboot, R_NORMAL);
+            break;
+
+        case BOOT_TIME:
+            // TODO: finish the case
+            lastboot = ut.ut_tv.tv_sec;
+            break;
+
+        case RUN_LVL:
+            break;
+
+        case USER_PROCESS:
+            break;
+
+        case DEAD_PROCESS:
+            break;
+        
+        default:
+            ft_putstr("unrecognized ut_type: ");
+            ft_putnbr(ut.ut_type);
+            ft_putstr("\n");
+            break;
+        }
 
         // cycle-end: checking if returning utmp 
         if (lseek(fd, -2*size_utmp, SEEK_CUR) == 0){
@@ -71,7 +219,11 @@ int process_wtmp_file(){
 
 int main(){
 
-    process_wtmp_file();
+    int res = process_wtmp_file();
+
+    // TODO: process the res and handle errors
+
+    (void)res;
 
     return (0);
 }
