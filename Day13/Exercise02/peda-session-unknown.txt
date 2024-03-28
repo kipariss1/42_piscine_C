@@ -1,0 +1,4 @@
+break btree_apply_infix.c:10
+break btree_apply_infix.c:53
+
+set exec-wrapper logging enabled
