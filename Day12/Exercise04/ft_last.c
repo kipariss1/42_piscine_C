@@ -223,6 +223,7 @@ int list(struct utmp *p, time_t logout_time, int what){
     }
 
     switch(what) {
+        // TODO: continue to implement switch for logout time
         // normal user-process, still logged in
         case R_NOW:
             ft_strcpy(logouttime, "   still");
